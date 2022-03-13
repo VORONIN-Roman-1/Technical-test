@@ -5,6 +5,8 @@ import com.voronin.technicaltest.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -15,8 +17,14 @@ public class UserController {
     public User getUserById(@PathVariable long id) {
         return userService.findById(id);
     }
+
+    @GetMapping("")
+    public User getUserByUserName(@RequestParam String userName) {
+        return userService.findByUserName(userName);
+    }
+
     @PostMapping("")
-    public User addUser(@RequestBody User user){
+    public User addUser(@Valid @RequestBody User user) {
         userService.save(user);
         return user;
     }

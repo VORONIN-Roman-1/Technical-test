@@ -16,7 +16,7 @@ public class User {
     private long id;
 
     @Column(name = "user_name")
-    @NotBlank
+    @NotBlank(message = "User name is incorrect")
     private String userName;
 
     @NotNull
@@ -25,12 +25,14 @@ public class User {
     private LocalDate birthDate;
 
     @NotBlank
+    @Pattern(regexp = "^France$", message = "Service unavailable in this country")
     private String country;
 
-    @Pattern(regexp = "^(\\+\\d{1,3}( )?)?\\d{10}$")
-    @Column(name="phone_number")
+    @Pattern(regexp = "^(\\+\\d{1,3}( )?)?\\d{10}$", message = "Phone number is incorrect")
+    @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Pattern(regexp = "^MALE$|^FEMALE", message = "Available options MALE, FEMALE")
     private String gender;
 
     //constructors
