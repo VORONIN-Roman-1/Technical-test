@@ -3,6 +3,8 @@ package com.voronin.technicaltest.controller;
 import com.voronin.technicaltest.entity.User;
 import com.voronin.technicaltest.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,7 +27,6 @@ public class UserController {
 
     @PostMapping("")
     public User addUser(@Valid @RequestBody User user) {
-        userService.save(user);
-        return user;
+        return userService.save(user);
     }
 }

@@ -33,16 +33,23 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleHttpMessageNotReadableException(
             HttpMessageNotReadableException ex, WebRequest request) {
         ErrorResponse errorDetails =
-                new ErrorResponse(new Date(), HttpStatus.BAD_REQUEST.toString(), ex.getMessage() + " Malformed JSON request", request.getDescription(false));
+                new ErrorResponse(new Date(), HttpStatus.BAD_REQUEST.toString(), " Malformed JSON request. "+ex.getMostSpecificCause(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(UserForbiddenException.class)
+    public ResponseEntity<?> handleUserForbiddenException(
+            UserForbiddenException ex, WebRequest request) {
+        ErrorResponse errorDetails =
+                new ErrorResponse(new Date(), HttpStatus.FORBIDDEN.toString(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
+    }
 
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<?> handleException(
-//            Exception ex, WebRequest request) {
-//        ErrorResponse errorDetails =
-//                new ErrorResponse(new Date(), HttpStatus.BAD_REQUEST.toString(), ex.getMessage(), request.getDescription(false));
-//        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
-//    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleException(
+            Exception ex, WebRequest request) {
+        ErrorResponse errorDetails =
+                new ErrorResponse(new Date(), HttpStatus.BAD_REQUEST.toString(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
 
 }

@@ -1,12 +1,15 @@
 package com.voronin.technicaltest.entity;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.voronin.technicaltest.validation.UserGender;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -16,23 +19,21 @@ public class User {
     private long id;
 
     @Column(name = "user_name")
-    @NotBlank(message = "User name is incorrect")
+    @NotBlank(message = "Name is mandatory")
     private String userName;
 
-    @NotNull
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "birthDate is mandatory")
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
-    @NotBlank
-    @Pattern(regexp = "^France$", message = "Service unavailable in this country")
+    @NotBlank(message = "Country is mandatory")
     private String country;
 
-    @Pattern(regexp = "^(\\+\\d{1,3}( )?)?\\d{10}$", message = "Phone number is incorrect")
+    @Pattern(regexp = "^(\\+\\d{1,3}( )?)?\\d{10}$", message = "Phone number format is incorrect")
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Pattern(regexp = "^MALE$|^FEMALE", message = "Available options MALE, FEMALE")
+    @UserGender(message = "Gender is incorrect")
     private String gender;
 
     //constructors
