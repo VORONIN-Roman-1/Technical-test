@@ -14,10 +14,8 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
 
+    @Id
     @Column(name = "user_name")
     @NotBlank(message = "Name is mandatory")
     private String userName;
@@ -58,14 +56,6 @@ public class User {
     //Getters and setters
 
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public String getUserName() {
         return userName;
     }
@@ -104,5 +94,16 @@ public class User {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userName='" + userName + '\'' +
+                ", birthDate=" + birthDate +
+                ", country='" + country + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", gender='" + gender + '\'' +
+                '}';
     }
 }

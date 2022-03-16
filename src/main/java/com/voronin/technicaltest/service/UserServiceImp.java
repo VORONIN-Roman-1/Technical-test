@@ -18,7 +18,7 @@ import java.util.Set;
 public class UserServiceImp implements UserService {
     @Value("${user.ageAuthorization}")
     private int ageAuthorization;
-    @Value("${listOfCountries}")
+    @Value("${user.listOfCountriesAuthorization}")
     private Set<String> listOfCountries;
 
     UserRepository userRepository;
@@ -28,13 +28,10 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public User findById(long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found on : " + userId));
-    }
-
-    @Override
     public User save(User user) {
         int age = Period.between(user.getBirthDate(), LocalDate.now()).getYears();
+        if (userRepository.existsById(user.getUserName()))
+            throw new UserForbiddenException("User" + user.getUserName() + " already exists");
         if (age < ageAuthorization)
             throw new UserForbiddenException("User is not adult: " + age + " year(s) old but necessary: " + ageAuthorization);
         if (!listOfCountries.contains(user.getCountry()))
@@ -44,6 +41,6 @@ public class UserServiceImp implements UserService {
 
     @Override
     public User findByUserName(String userName) {
-        return userRepository.findFirstByUserName(userName);
+        return userRepository.findByUserName(userName).orElseThrow(() -> new ResourceNotFoundException("User " + userName + " not found"));
     }
 }

@@ -16,7 +16,7 @@ public class UserGenderConstraintValidator implements ConstraintValidator<UserGe
 
     @Override
     public boolean isValid(String gender, ConstraintValidatorContext context) {
-        return genders == null || genders.isEmpty() || genders.contains(gender);
+        return genders == null || genders.isEmpty() || gender == null || gender.equals("") || genders.contains(gender);
 
     }
 }
