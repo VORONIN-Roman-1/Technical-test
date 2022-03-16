@@ -11,8 +11,12 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-    @Autowired
+
     UserService userService;
+
+    public UserController(@Autowired UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("")
     public User getUserByUserName(@RequestParam String userName) {

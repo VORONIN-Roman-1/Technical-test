@@ -1,109 +1,40 @@
 package com.voronin.technicaltest.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.voronin.technicaltest.validation.UserGender;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "users")
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @ToString @Builder
 public class User {
 
     @Id
     @Column(name = "user_name")
-    @NotBlank(message = "Name is mandatory")
+    @NotBlank(message = "Username is mandatory")
+    @Size(max = 100, message = "Username is too long")
     private String userName;
 
-    @NotNull(message = "birthDate is mandatory")
+    @Past(message = "You have not been born yet. Check yours date of birth ")
+    @NotNull(message = "Date of birth is mandatory")
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
     @NotBlank(message = "Country is mandatory")
+    @Size(max = 100, message = "Country name is too long")
     private String country;
 
-    @Pattern(regexp = "^(\\+\\d{1,3}( )?)?\\d{10}$", message = "Phone number format is incorrect")
+    @Pattern(regexp = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"
+            + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
+            + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$", message = "Phone number format is incorrect")
     @Column(name = "phone_number")
     private String phoneNumber;
 
     @UserGender(message = "Gender is incorrect")
     private String gender;
 
-    //constructors
-
-    public User() {
-    }
-
-    public User(String userName, LocalDate birthDate, String country) {
-        this.userName = userName;
-        this.birthDate = birthDate;
-        this.country = country;
-    }
-
-    public User(String userName, LocalDate birthDate, String country, String phoneNumber, String gender) {
-        this.userName = userName;
-        this.birthDate = birthDate;
-        this.country = country;
-        this.phoneNumber = phoneNumber;
-        this.gender = gender;
-    }
-
-    //Getters and setters
-
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "userName='" + userName + '\'' +
-                ", birthDate=" + birthDate +
-                ", country='" + country + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", gender='" + gender + '\'' +
-                '}';
-    }
 }

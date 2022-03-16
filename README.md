@@ -17,7 +17,7 @@ java -jar target/Technical-test-0.0.1-SNAPSHOT.jar
 
 ```
 
-Alternatively, you can run the app without packaging it using -
+Alternatively, you can run the app without packaging
 
 ```bash
 mvn spring-boot:run
@@ -27,7 +27,7 @@ The app will start running at <http://localhost:8080>.
 
 ## Explore Rest APIs
 
-The app defines following CRUD APIs.
+The app defines the following CRUD APIs.
 ```
     GET /api/users?userName={userName}
     
@@ -35,7 +35,7 @@ The app defines following CRUD APIs.
 ```
 Create a user:
 ```
-PUT /api/users
+POST /api/users
 Accept: application/json
 Content-Type: application/json
 
@@ -54,7 +54,7 @@ Location header: http://localhost:8080/api/users?userName=Marjorie
 Retrieve a user:
 
 ```
-http://localhost:8080/api/users?userName=Emmanuel
+GET /api/users?userName=Emmanuel
 
 Response: HTTP 200
 ```

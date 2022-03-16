@@ -40,7 +40,13 @@ class UserControllerTest {
 
     @BeforeEach
     public void init() {
-        user = new User("Pierre", LocalDate.of(1934, 8, 16), "France", "+33 1234567890", "MALE");
+        user = User.builder()
+                .userName("Pierre")
+                .birthDate(LocalDate.of(1934, 8, 16))
+                .country("France")
+                .phoneNumber("+33 1234567890")
+                .gender("MALE")
+                .build();
     }
 
     @Test
@@ -68,6 +74,16 @@ class UserControllerTest {
                 .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isBadRequest());
     }
+    @Test
+    void addUserWhenInvalidInput_userNameTooLong_thenReturns400() throws Exception {
+
+        user.setUserName("qwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnm");
+
+        mockMvc.perform(post("/api/users")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(user)))
+                .andExpect(status().isBadRequest());
+    }
 
     @Test
     void addUserWhenInvalidInput_birthDate_thenReturns400() throws Exception {
@@ -78,11 +94,29 @@ class UserControllerTest {
                 .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isBadRequest());
     }
+    @Test
+    void addUserWhenInvalidInput_birthDateFuture_thenReturns400() throws Exception {
+
+        user.setBirthDate(LocalDate.of(2934, 8, 16));
+        mockMvc.perform(post("/api/users")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(user)))
+                .andExpect(status().isBadRequest());
+    }
 
     @Test
     void addUserWhenInvalidInput_country_thenReturns400() throws Exception {
 
         user.setCountry("    ");
+        mockMvc.perform(post("/api/users")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(user)))
+                .andExpect(status().isBadRequest());
+    }
+    @Test
+    void addUserWhenInvalidInput_countryTooLong_thenReturns400() throws Exception {
+
+        user.setCountry("qwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnm");
         mockMvc.perform(post("/api/users")
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(user)))

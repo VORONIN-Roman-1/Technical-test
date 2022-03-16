@@ -19,11 +19,11 @@ public class LoggerAspect {
     @Pointcut("execution(public * com.voronin.technicaltest.dao..*(..)) " +
             "|| execution(public * com.voronin.technicaltest.service..*(..))" +
             "|| execution(public * com.voronin.technicaltest.exception..*(..))" +
-            "|| execution(public * com.voronin.technicaltest.controller..*(..))  ")
-    public void callAtMyServicePublic() {
+            "|| execution(public * com.voronin.technicaltest.controller..*(..)) ")
+    public void callAtLoggerAspectPublic() {
     }
 
-    @Around("callAtMyServicePublic()")
+    @Around("callAtLoggerAspectPublic()")
     public Object aroundCallAt(ProceedingJoinPoint call) throws Throwable {
         MethodSignature methodSignature = (MethodSignature) call.getSignature();
         StopWatch clock = new StopWatch(call.toString());

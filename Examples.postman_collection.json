@@ -1,0 +1,163 @@
+{
+	"info": {
+		"_postman_id": "c08db50a-6147-43f5-af30-24bd818ef8d0",
+		"name": "Postman Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "correct requests",
+			"item": [
+				{
+					"name": "http://localhost:8080/api/users",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"Alexandra Lamy\",\r\n    \"birthDate\": \"1971-10-14\",\r\n    \"country\": \"France\",\r\n    \"phoneNumber\": \"+33 0657454545\",\r\n    \"gender\": \"FEMALE\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users"
+							]
+						},
+						"description": "correct post method"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/api/users?userName=Emmanuel",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/users?userName=Emmanuel",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users"
+							],
+							"query": [
+								{
+									"key": "userName",
+									"value": "Emmanuel"
+								}
+							]
+						},
+						"description": "Correct Get method"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "incorrect requests",
+			"item": [
+				{
+					"name": "http://localhost:8080/api/users?userName=Emmanuel",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/users?userName=Emma",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users"
+							],
+							"query": [
+								{
+									"key": "userName",
+									"value": "Emma"
+								}
+							]
+						},
+						"description": "Incorrect Get method\n\"message\": \"User Emma not found\""
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/api/users",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"Sophie\",\r\n    \"birthDate\": \"1971-10-14\",\r\n    \"country\": \"France\",\r\n    \"phoneNumber\": \"+33 0657454545\",\r\n    \"gender\": \"FEMALE\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users"
+							]
+						},
+						"description": "incorrect Post method\n\"message\": \"UserSophie already exists\""
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/api/users Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"Sophie\",\r\n    \"birthDate\": \"1971-10-14\",\r\n    \"country\": \"France\",\r\n    \"phoneNumber\": \"+33 0657454545\",\r\n    \"gender\": \"FEMALE\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users"
+							]
+						},
+						"description": "Incorrect post method\n\"message\": \"Service unavailable in this country Russia. Available countries : [France]\""
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

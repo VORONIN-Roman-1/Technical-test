@@ -3,6 +3,7 @@ package com.voronin.technicaltest.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -43,13 +44,12 @@ public class GlobalExceptionHandler {
                 new ErrorResponse(new Date(), HttpStatus.FORBIDDEN.toString(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
     }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleException(
-            Exception ex, WebRequest request) {
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<?> handleHttpRequestMethodNotSupportedException(
+            HttpRequestMethodNotSupportedException ex, WebRequest request) {
         ErrorResponse errorDetails =
-                new ErrorResponse(new Date(), HttpStatus.BAD_REQUEST.toString(), ex.getMessage(), request.getDescription(false));
-        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+                new ErrorResponse(new Date(), HttpStatus.METHOD_NOT_ALLOWED.toString(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.METHOD_NOT_ALLOWED);
     }
 
 }
