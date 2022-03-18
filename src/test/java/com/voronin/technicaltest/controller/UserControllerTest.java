@@ -20,8 +20,8 @@ import java.time.LocalDate;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -50,7 +50,7 @@ class UserControllerTest {
     }
 
     @Test
-    void addUserWhenValidInput_thenReturns200() throws Exception {
+    void addUserWhenValidInput_thenReturns201() throws Exception {
 
         MvcResult mvcResult = mockMvc.perform(post("/api/users")
                 .contentType("application/json")
@@ -59,8 +59,7 @@ class UserControllerTest {
 
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         verify(userServiceMock, times(1)).save(userCaptor.capture());
-        assertThat("Pierre").isEqualTo("Pierre");
-
+        assertThat(userCaptor.getValue().getUserName()).isEqualTo("Pierre");
 
     }
 
@@ -74,6 +73,7 @@ class UserControllerTest {
                 .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isBadRequest());
     }
+
     @Test
     void addUserWhenInvalidInput_userNameTooLong_thenReturns400() throws Exception {
 
@@ -94,6 +94,7 @@ class UserControllerTest {
                 .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isBadRequest());
     }
+
     @Test
     void addUserWhenInvalidInput_birthDateFuture_thenReturns400() throws Exception {
 
@@ -113,6 +114,7 @@ class UserControllerTest {
                 .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isBadRequest());
     }
+
     @Test
     void addUserWhenInvalidInput_countryTooLong_thenReturns400() throws Exception {
 
@@ -144,22 +146,31 @@ class UserControllerTest {
     }
 
 
+//    @Test
+//    void getUserByUserNameWhenValidInput_thenReturns200() throws Exception {
+//
+//        mockMvc.perform(get("/api/users")
+//                .contentType("application/json")
+//                .param("userName", "Emmanuel"))
+//                .andExpect(status().isOk());
+//        verify(userServiceMock, times(1)).findByUserName(ArgumentMatchers.anyString());
+//    }
+
     @Test
     void getUserByUserNameWhenValidInput_thenReturns200() throws Exception {
 
-        mockMvc.perform(get("/api/users")
-                .contentType("application/json")
-                .param("userName", "Emmanuel"))
+        mockMvc.perform(get("/api/users/{userName}", "Emmanuel")
+                .contentType("application/json"))
                 .andExpect(status().isOk());
         verify(userServiceMock, times(1)).findByUserName(ArgumentMatchers.anyString());
     }
 
     @Test
-    void getUserByUserNameWhenInvalidInput_UserNameNull_thenReturns200() throws Exception {
+    void getUserByUserNameWhenInvalidInput_UserNameNull_thenReturns400() throws Exception {
 
-        mockMvc.perform(get("/api/users")
+        mockMvc.perform(get("/api/users/{userName}", "")
                 .contentType("application/json"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isMethodNotAllowed());
     }
 
 

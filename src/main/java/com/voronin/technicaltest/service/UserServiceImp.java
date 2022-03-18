@@ -3,27 +3,27 @@ package com.voronin.technicaltest.service;
 import com.voronin.technicaltest.dao.UserRepository;
 import com.voronin.technicaltest.entity.User;
 import com.voronin.technicaltest.exception.ResourceNotFoundException;
-import com.voronin.technicaltest.exception.UserForbiddenException;
+import com.voronin.technicaltest.exception.UserConflictException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
 @Transactional
 public class UserServiceImp implements UserService {
-    @Value("${user.ageAuthorization}")
-    private int ageAuthorization;
-    @Value("${user.listOfCountriesAuthorization}")
-    private Set<String> listOfCountries;
 
-    UserRepository userRepository;
+    private Environment environment;
 
-    public UserServiceImp(@Autowired UserRepository userRepository) {
+    private UserRepository userRepository;
+
+    public UserServiceImp(@Autowired Environment environment, @Autowired UserRepository userRepository) {
+        this.environment = environment;
         this.userRepository = userRepository;
     }
 
@@ -31,11 +31,15 @@ public class UserServiceImp implements UserService {
     public User save(User user) {
         int age = Period.between(user.getBirthDate(), LocalDate.now()).getYears();
         if (userRepository.existsById(user.getUserName()))
-            throw new UserForbiddenException("User" + user.getUserName() + " already exists");
+            throw new UserConflictException("User" + user.getUserName() + " already exists");
+
+        int ageAuthorization = environment.getProperty("user.ageAuthorization", Integer.class, 18);
         if (age < ageAuthorization)
-            throw new UserForbiddenException("User is not adult: " + age + " year(s) old but necessary: " + ageAuthorization);
+            throw new UserConflictException("User is not adult: " + age + " year(s) old but necessary: " + ageAuthorization);
+
+        Set<String> listOfCountries = environment.getProperty("user.listOfCountriesAuthorization", Set.class, new HashSet<String>());
         if (!listOfCountries.contains(user.getCountry()))
-            throw new UserForbiddenException("Service unavailable in this country " + user.getCountry() + ". Available countries : " + listOfCountries);
+            throw new UserConflictException("Service unavailable in this country " + user.getCountry() + ". Available countries : " + listOfCountries);
         return userRepository.save(user);
     }
 

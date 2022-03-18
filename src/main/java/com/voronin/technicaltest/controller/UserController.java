@@ -12,14 +12,14 @@ import javax.validation.Valid;
 @RequestMapping("/api/users")
 public class UserController {
 
-    UserService userService;
+    private UserService userService;
 
     public UserController(@Autowired UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping("")
-    public User getUserByUserName(@RequestParam String userName) {
+    @GetMapping("{userName}")
+    public User getUserByUserName(@PathVariable String userName) {
         return userService.findByUserName(userName);
     }
 
