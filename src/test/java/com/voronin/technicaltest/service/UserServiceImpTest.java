@@ -4,10 +4,12 @@ import com.voronin.technicaltest.dao.UserRepository;
 import com.voronin.technicaltest.entity.User;
 import com.voronin.technicaltest.exception.ResourceNotFoundException;
 import com.voronin.technicaltest.exception.UserConflictException;
+import com.voronin.technicaltest.exception.UserRestrictedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -33,28 +35,33 @@ class UserServiceImpTest {
     @Mock
     private UserRepository userRepository;
 
+    @InjectMocks
     private UserServiceImp userService;
 
     @BeforeEach
     public void init() {
         when(environment.getProperty("user.ageAuthorization", Integer.class, 18)).thenReturn(18);
         when(environment.getProperty("user.listOfCountriesAuthorization", Set.class, new HashSet<String>())).thenReturn(Set.of("France"));
-        userService = new UserServiceImp(environment, userRepository);
+
         when(user.getBirthDate()).thenReturn(LocalDate.of(1934, 8, 16));
         when(user.getUserName()).thenReturn("Pierre");
         when(user.getCountry()).thenReturn("France");
+
+        when(userRepository.existsById("Pierre")).thenReturn(false);
     }
 
     @Test
     void saveCorrect() {
         userService.save(user);
+        verify(userRepository, times(1)).existsById(anyString());
         verify(userRepository, times(1)).save(user);
+
     }
 
     @Test
     void saveIncorrectCountry() {
         when(user.getCountry()).thenReturn("ErrorCountry");
-        Exception thrown = assertThrows(UserConflictException.class,
+        Exception thrown = assertThrows(UserRestrictedException.class,
                 () -> userService.save(user),
                 "Expected save(user) to throw, but it didn't");
         assertTrue(thrown.getMessage().contains("Service unavailable in this country"));
@@ -64,7 +71,7 @@ class UserServiceImpTest {
     @Test
     void saveIncorrectBirthDate() {
         when(user.getBirthDate()).thenReturn(LocalDate.of(2020, 2, 2));
-        Exception thrown = assertThrows(UserConflictException.class,
+        Exception thrown = assertThrows(UserRestrictedException.class,
                 () -> userService.save(user),
                 "Expected save(user) to throw, but it didn't");
         assertTrue(thrown.getMessage().contains("User is not adult"));
@@ -73,11 +80,11 @@ class UserServiceImpTest {
 
     @Test
     void saveIncorrectUserExists() {
-        when(user.getBirthDate()).thenReturn(LocalDate.of(2020, 2, 2));
+        when(userRepository.existsById(user.getUserName())).thenReturn(true);
         Exception thrown = assertThrows(UserConflictException.class,
                 () -> userService.save(user),
                 "Expected save(user) to throw, but it didn't");
-        assertTrue(thrown.getMessage().contains("User is not adult"));
+        assertTrue(thrown.getMessage().contains("already exists"));
         verify(userRepository, times(0)).save(user);
     }
 
@@ -94,7 +101,7 @@ class UserServiceImpTest {
         when(userRepository.findByUserName("Pierre")).thenReturn(Optional.empty());
         Exception thrown = assertThrows(ResourceNotFoundException.class,
                 () -> userService.findByUserName("Pierre"),
-                "Expected findByUserName(1l) to throw, but it didn't");
+                "Expected findByUserName(\"Pierre\") to throw, but it didn't");
         assertTrue(thrown.getMessage().contains("not found"));
         verify(userRepository, times(1)).findByUserName(ArgumentMatchers.anyString());
     }

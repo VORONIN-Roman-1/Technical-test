@@ -4,6 +4,7 @@ import com.voronin.technicaltest.dao.UserRepository;
 import com.voronin.technicaltest.entity.User;
 import com.voronin.technicaltest.exception.ResourceNotFoundException;
 import com.voronin.technicaltest.exception.UserConflictException;
+import com.voronin.technicaltest.exception.UserRestrictedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public User save(User user) {
         int age = Period.between(user.getBirthDate(), LocalDate.now()).getYears();
         if (userRepository.existsById(user.getUserName()))
@@ -35,11 +37,11 @@ public class UserServiceImp implements UserService {
 
         int ageAuthorization = environment.getProperty("user.ageAuthorization", Integer.class, 18);
         if (age < ageAuthorization)
-            throw new UserConflictException("User is not adult: " + age + " year(s) old but necessary: " + ageAuthorization);
+            throw new UserRestrictedException("User is not adult: " + age + " year(s) old but necessary: " + ageAuthorization);
 
         Set<String> listOfCountries = environment.getProperty("user.listOfCountriesAuthorization", Set.class, new HashSet<String>());
         if (!listOfCountries.contains(user.getCountry()))
-            throw new UserConflictException("Service unavailable in this country " + user.getCountry() + ". Available countries : " + listOfCountries);
+            throw new UserRestrictedException("Service unavailable in this country " + user.getCountry() + ". Available countries : " + listOfCountries);
         return userRepository.save(user);
     }
 

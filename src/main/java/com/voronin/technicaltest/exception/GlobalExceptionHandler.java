@@ -45,9 +45,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(UserNotAllowedException.class)
+    @ExceptionHandler(UserRestrictedException.class)
     public ResponseEntity<ErrorResponse> handleUserNotAllowedException(
-            UserNotAllowedException ex, WebRequest request) {
+            UserRestrictedException ex, WebRequest request) {
         ErrorResponse errorDetails =
                 new ErrorResponse(new Date(), HttpStatus.BAD_REQUEST.toString(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);

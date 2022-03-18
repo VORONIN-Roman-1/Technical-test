@@ -10,6 +10,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/users")
+
 public class UserController {
 
     private UserService userService;
