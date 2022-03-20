@@ -8,7 +8,6 @@
 https://github.com/VORONIN-Roman-1/Technical-test.git
 ```
 
-
 **2. Build and run the app using maven**
 
 ```bash
@@ -25,15 +24,24 @@ mvn spring-boot:run
 
 The app will start running at <http://localhost:8080>.
 
+**3. Build documentation (JavaDoc)**
+
+```bash
+mvn javadoc:javadoc
+```
+
 ## Explore Rest APIs
 
 The app defines the following CRUD APIs.
+
 ```
-    GET /api/users?userName={userName}
+    GET /api/users/{userName}
     
     POST /api/users    
 ```
+
 Create a user:
+
 ```
 POST /api/users
 Accept: application/json
@@ -48,13 +56,13 @@ Content-Type: application/json
 }
 
 RESPONSE: HTTP 201 (Created)
-Location header: http://localhost:8080/api/users?userName=Marjorie
+Location header: http://localhost:8080/api/users/Marjorie
 ```
 
 Retrieve a user:
 
 ```
-GET /api/users?userName=Emmanuel
+GET /api/users/Emmanuel
 
 Response: HTTP 200
 ```

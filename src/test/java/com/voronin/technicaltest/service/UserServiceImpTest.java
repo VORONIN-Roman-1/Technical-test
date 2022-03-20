@@ -23,14 +23,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests of {@link UserServiceImp} .
+ */
 @ExtendWith(SpringExtension.class)
 class UserServiceImpTest {
 
     @Mock
-    User user;
+    private User user;
 
     @Mock
-    Environment environment;
+    private Environment environment;
 
     @Mock
     private UserRepository userRepository;
@@ -38,6 +41,9 @@ class UserServiceImpTest {
     @InjectMocks
     private UserServiceImp userService;
 
+    /**
+     * Initialise a test.
+     */
     @BeforeEach
     public void init() {
         when(environment.getProperty("user.ageAuthorization", Integer.class, 18)).thenReturn(18);
@@ -50,6 +56,9 @@ class UserServiceImpTest {
         when(userRepository.existsById("Pierre")).thenReturn(false);
     }
 
+    /**
+     * Save correct {@link User}.
+     */
     @Test
     void saveCorrect() {
         userService.save(user);
@@ -58,8 +67,12 @@ class UserServiceImpTest {
 
     }
 
+
+    /**
+     * Save incorrect country then throw {@link UserRestrictedException}.
+     */
     @Test
-    void saveIncorrectCountry() {
+    void saveIncorrectCountryThenThrowUserRestrictedException() {
         when(user.getCountry()).thenReturn("ErrorCountry");
         Exception thrown = assertThrows(UserRestrictedException.class,
                 () -> userService.save(user),
@@ -68,8 +81,11 @@ class UserServiceImpTest {
         verify(userRepository, times(0)).save(user);
     }
 
+    /**
+     * Save incorrect birth date then throw {@link UserRestrictedException}.
+     */
     @Test
-    void saveIncorrectBirthDate() {
+    void saveIncorrectBirthDateThenThrowUserRestrictedException() {
         when(user.getBirthDate()).thenReturn(LocalDate.of(2020, 2, 2));
         Exception thrown = assertThrows(UserRestrictedException.class,
                 () -> userService.save(user),
@@ -78,8 +94,12 @@ class UserServiceImpTest {
         verify(userRepository, times(0)).save(user);
     }
 
+
+    /**
+     * Save incorrect user exists then throw {@link ResourceNotFoundException}.
+     */
     @Test
-    void saveIncorrectUserExists() {
+    void saveIncorrectUserExistsThenThrowUserConflictException() {
         when(userRepository.existsById(user.getUserName())).thenReturn(true);
         Exception thrown = assertThrows(UserConflictException.class,
                 () -> userService.save(user),
@@ -88,6 +108,9 @@ class UserServiceImpTest {
         verify(userRepository, times(0)).save(user);
     }
 
+    /**
+     * Find by correct user name.
+     */
     @Test
     void findByUserNameCorrect() {
         when(userRepository.findByUserName("Pierre")).thenReturn(Optional.of(user));
@@ -96,8 +119,12 @@ class UserServiceImpTest {
         verify(userRepository, times(1)).findByUserName(ArgumentMatchers.anyString());
     }
 
+
+    /**
+     * Find by user name incorrect then throw {@link ResourceNotFoundException}.
+     */
     @Test
-    void findByUserNameIncorrect() {
+    void findByUserNameIncorrectThenThrowResourceNotFoundException() {
         when(userRepository.findByUserName("Pierre")).thenReturn(Optional.empty());
         Exception thrown = assertThrows(ResourceNotFoundException.class,
                 () -> userService.findByUserName("Pierre"),

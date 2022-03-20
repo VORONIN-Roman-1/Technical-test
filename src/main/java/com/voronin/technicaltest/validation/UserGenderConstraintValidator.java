@@ -6,9 +6,12 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.Set;
 
+/**
+ * The type User gender constraint validator.
+ */
 public class UserGenderConstraintValidator implements ConstraintValidator<UserGender, String> {
     @Value("${user.gender}")
-    Set<String> genders;
+    private Set<String> genders;
 
     @Override
     public void initialize(UserGender userGender) {
@@ -19,4 +22,5 @@ public class UserGenderConstraintValidator implements ConstraintValidator<UserGe
         return genders == null || genders.isEmpty() || gender == null || gender.equals("") || genders.contains(gender);
 
     }
+
 }

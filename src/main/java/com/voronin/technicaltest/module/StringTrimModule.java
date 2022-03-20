@@ -8,9 +8,15 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+/**
+ * The type String trim module.
+ */
 @Component
 public class StringTrimModule extends SimpleModule {
 
+    /**
+     * Instantiates a new String trim module.
+     */
     public StringTrimModule() {
         addDeserializer(String.class, new StdScalarDeserializer<>(String.class) {
             @Override

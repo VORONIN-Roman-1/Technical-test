@@ -25,10 +25,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
+/**
+ * {@link UserController} integration tests.
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
 class UserControllerTest {
-    User user;
+
+    private User user;
     @Autowired
     private MockMvc mockMvc;
 
@@ -38,6 +42,9 @@ class UserControllerTest {
     @MockBean
     private UserRepository userRepositoryMock;
 
+    /**
+     * Initialise a test.
+     */
     @BeforeEach
     public void init() {
         user = User.builder()
@@ -49,6 +56,11 @@ class UserControllerTest {
                 .build();
     }
 
+    /**
+     * Add user when valid input then return 201.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void addUserWhenValidInput_thenReturns201() throws Exception {
 
@@ -69,6 +81,11 @@ class UserControllerTest {
                 .isEqualToIgnoringWhitespace(objectMapper.writeValueAsString(user));
     }
 
+    /**
+     * Add user when invalid input if user exists then return 409.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void addUserWhenInvalidInput_userExists_thenReturns409() throws Exception {
 
@@ -83,6 +100,11 @@ class UserControllerTest {
         assertTrue(mvcResult.getResponse().getContentAsString().contains("already exists"));
     }
 
+    /**
+     * Add user when invalid input if user name null then return 400.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void addUserWhenInvalidInput_userNameNULL_thenReturns400() throws Exception {
 
@@ -94,6 +116,11 @@ class UserControllerTest {
         assertTrue(mvcResult.getResponse().getContentAsString().contains("Username is mandatory"));
     }
 
+    /**
+     * Add user when invalid input if user name too long then return 400.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void addUserWhenInvalidInput_userNameTooLong_thenReturns400() throws Exception {
 
@@ -107,6 +134,11 @@ class UserControllerTest {
         assertTrue(mvcResult.getResponse().getContentAsString().contains("Username is too long"));
     }
 
+    /**
+     * Add user when invalid input if birth date is null then return 400.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void addUserWhenInvalidInput_birthDateNUll_thenReturns400() throws Exception {
 
@@ -118,6 +150,11 @@ class UserControllerTest {
         assertTrue(mvcResult.getResponse().getContentAsString().contains("Date of birth is mandatory"));
     }
 
+    /**
+     * Add user when invalid input if birth date is in the future then return 400.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void addUserWhenInvalidInput_birthDateFuture_thenReturns400() throws Exception {
 
@@ -129,6 +166,11 @@ class UserControllerTest {
         assertTrue(mvcResult.getResponse().getContentAsString().contains("You have not been born yet."));
     }
 
+    /**
+     * Add user when invalid input if user is not adult then return 400.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void addUserWhenInvalidInput_birthDateNotAdult_thenReturns400() throws Exception {
 
@@ -141,6 +183,11 @@ class UserControllerTest {
 
     }
 
+    /**
+     * Add user when invalid input if country is null then return 400.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void addUserWhenInvalidInput_countryNULL_thenReturns400() throws Exception {
 
@@ -152,6 +199,11 @@ class UserControllerTest {
         assertTrue(mvcResult.getResponse().getContentAsString().contains("Country is mandatory"));
     }
 
+    /**
+     * Add user when invalid input if country name is too long then return 400.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void addUserWhenInvalidInput_countryTooLong_thenReturns400() throws Exception {
 
@@ -164,6 +216,11 @@ class UserControllerTest {
         assertTrue(mvcResult.getResponse().getContentAsString().contains("Country name is too long"));
     }
 
+    /**
+     * Add user when invalid input if country is restricted then return 400.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void addUserWhenInvalidInput_countryRestricted_thenReturns400() throws Exception {
 
@@ -175,6 +232,11 @@ class UserControllerTest {
         assertTrue(mvcResult.getResponse().getContentAsString().contains("Service unavailable in this country"));
     }
 
+    /**
+     * Add user when invalid phone number then return 400.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void addUserWhenInvalidInput_phoneNumber_thenReturns400() throws Exception {
 
@@ -186,6 +248,11 @@ class UserControllerTest {
         assertTrue(mvcResult.getResponse().getContentAsString().contains("Phone number format is incorrect"));
     }
 
+    /**
+     * Add user when invalid user gender then return 400.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void addUserWhenInvalidInput_userGender_thenReturns400() throws Exception {
 
@@ -197,6 +264,11 @@ class UserControllerTest {
         assertTrue(mvcResult.getResponse().getContentAsString().contains("Gender is incorrect"));
     }
 
+    /**
+     * Get user by user name when valid input then return 200.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void getUserByUserNameWhenValidInput_thenReturns200() throws Exception {
         when(userRepositoryMock.findByUserName("Pierre")).thenReturn(Optional.of(user));
@@ -211,6 +283,11 @@ class UserControllerTest {
 
     }
 
+    /**
+     * Get user by user name when invalid input if user name is null then return 400.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void getUserByUserNameWhenInvalidInput_UserNameNull_thenReturns400() throws Exception {
 

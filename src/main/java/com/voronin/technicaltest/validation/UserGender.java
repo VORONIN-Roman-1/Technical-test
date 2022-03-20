@@ -7,14 +7,33 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Annotation gender.
+ */
 @Constraint(validatedBy = UserGenderConstraintValidator.class)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UserGender {
 
-    public String message() default "Gender incorrect";
+    /**
+     * Error message.
+     *
+     * @return the message
+     */
+    String message() default "Gender incorrect";
 
-    public Class<?>[] groups() default {};
+    /**
+     * Groups class [ ].
+     *
+     * @return the class [ ]
+     */
+    Class<?>[] groups() default {};
 
-    public Class<? extends Payload>[] payload() default {};
+    /**
+     * Payload class [ ].
+     *
+     * @return the class [ ]
+     */
+    Class<? extends Payload>[] payload() default {};
+
 }

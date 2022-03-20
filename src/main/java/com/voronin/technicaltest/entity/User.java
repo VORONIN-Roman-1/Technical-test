@@ -11,6 +11,17 @@ import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 
+/**
+ * The entity User.
+ * Available fields:
+ * <ul>
+ * <li> {@link String} userName;
+ * <li> {@link LocalDate}  birthDate;
+ * <li> {@link String}  country;
+ * <li> {@link String}  phoneNumber;
+ * <li> {@link String}  gender;
+ * </ul>
+ */
 @Entity
 @Table(name = "users")
 @Getter

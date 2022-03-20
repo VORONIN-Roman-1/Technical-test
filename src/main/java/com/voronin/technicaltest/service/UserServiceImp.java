@@ -15,6 +15,10 @@ import java.time.Period;
 import java.util.HashSet;
 import java.util.Set;
 
+
+/**
+ * The implementation of  {@link UserService}.
+ */
 @Service
 @Transactional
 public class UserServiceImp implements UserService {
@@ -23,6 +27,12 @@ public class UserServiceImp implements UserService {
 
     private UserRepository userRepository;
 
+    /**
+     * Instantiates a new User service.
+     *
+     * @param environment    {@link Environment}
+     * @param userRepository {@link UserRepository}
+     */
     public UserServiceImp(@Autowired Environment environment, @Autowired UserRepository userRepository) {
         this.environment = environment;
         this.userRepository = userRepository;
@@ -33,7 +43,7 @@ public class UserServiceImp implements UserService {
     public User save(User user) {
         int age = Period.between(user.getBirthDate(), LocalDate.now()).getYears();
         if (userRepository.existsById(user.getUserName()))
-            throw new UserConflictException("User" + user.getUserName() + " already exists");
+            throw new UserConflictException("User " + user.getUserName() + " already exists");
 
         int ageAuthorization = environment.getProperty("user.ageAuthorization", Integer.class, 18);
         if (age < ageAuthorization)
@@ -49,4 +59,5 @@ public class UserServiceImp implements UserService {
     public User findByUserName(String userName) {
         return userRepository.findByUserName(userName).orElseThrow(() -> new ResourceNotFoundException("User " + userName + " not found"));
     }
+
 }

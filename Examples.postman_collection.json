@@ -39,12 +39,12 @@
 					"response": []
 				},
 				{
-					"name": "http://localhost:8080/api/users?userName=Emmanuel",
+					"name": "http://localhost:8080/api/users/Emmanuel",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/users?userName=Emmanuel",
+							"raw": "http://localhost:8080/api/users/Emmanuel",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -52,13 +52,8 @@
 							"port": "8080",
 							"path": [
 								"api",
-								"users"
-							],
-							"query": [
-								{
-									"key": "userName",
-									"value": "Emmanuel"
-								}
+								"users",
+								"Emmanuel"
 							]
 						},
 						"description": "Correct Get method"
@@ -71,12 +66,12 @@
 			"name": "incorrect requests",
 			"item": [
 				{
-					"name": "http://localhost:8080/api/users?userName=Emmanuel",
+					"name": "http://localhost:8080/api/users/Emma",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/users?userName=Emma",
+							"raw": "http://localhost:8080/api/users/Emma",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -84,13 +79,8 @@
 							"port": "8080",
 							"path": [
 								"api",
-								"users"
-							],
-							"query": [
-								{
-									"key": "userName",
-									"value": "Emma"
-								}
+								"users",
+								"Emma"
 							]
 						},
 						"description": "Incorrect Get method\n\"message\": \"User Emma not found\""
@@ -124,36 +114,6 @@
 							]
 						},
 						"description": "incorrect Post method\n\"message\": \"UserSophie already exists\""
-					},
-					"response": []
-				},
-				{
-					"name": "http://localhost:8080/api/users Copy",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"userName\": \"Sophie\",\r\n    \"birthDate\": \"1971-10-14\",\r\n    \"country\": \"France\",\r\n    \"phoneNumber\": \"+33 0657454545\",\r\n    \"gender\": \"FEMALE\"\r\n    \r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/api/users",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"users"
-							]
-						},
-						"description": "Incorrect post method\n\"message\": \"Service unavailable in this country Russia. Available countries : [France]\""
 					},
 					"response": []
 				}

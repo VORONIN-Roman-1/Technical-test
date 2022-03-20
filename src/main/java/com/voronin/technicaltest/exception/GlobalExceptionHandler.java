@@ -11,8 +11,18 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.util.Date;
 
+/**
+ * The type Global exception handler.
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    /**
+     * Handle {@link ResourceNotFoundException}
+     *
+     * @param ex      the exception
+     * @param request the request
+     * @return the response entity
+     */
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(
             ResourceNotFoundException ex, WebRequest request) {
@@ -21,6 +31,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Handle  {@link MethodArgumentNotValidException}
+     *
+     * @param ex      the exception
+     * @param request the request
+     * @return the response entity
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException ex, WebRequest request) {
@@ -29,6 +46,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Handle {@link HttpMessageNotReadableException}
+     *
+     * @param ex      the exception
+     * @param request the request
+     * @return the response entity
+     */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(
             HttpMessageNotReadableException ex, WebRequest request) {
@@ -37,6 +61,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Handle {@link UserConflictException}
+     *
+     * @param ex      the exception
+     * @param request the request
+     * @return the response entity
+     */
     @ExceptionHandler(UserConflictException.class)
     public ResponseEntity<ErrorResponse> handleUserConflictException(
             UserConflictException ex, WebRequest request) {
@@ -45,6 +76,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
     }
 
+    /**
+     * Handle {@link UserRestrictedException}
+     *
+     * @param ex      the exception
+     * @param request the request
+     * @return the response entity
+     */
     @ExceptionHandler(UserRestrictedException.class)
     public ResponseEntity<ErrorResponse> handleUserNotAllowedException(
             UserRestrictedException ex, WebRequest request) {
@@ -53,6 +91,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Handle {@link HttpRequestMethodNotSupportedException}
+     *
+     * @param ex      the exception
+     * @param request the request
+     * @return the response entity
+     */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(
             HttpRequestMethodNotSupportedException ex, WebRequest request) {
